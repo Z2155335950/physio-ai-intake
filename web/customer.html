@@ -1,0 +1,339 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0f6557" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <title>坤元骨道</title>
+    <link rel="icon" href="/static/icon.svg?v=8" type="image/svg+xml" />
+    <link rel="stylesheet" href="/static/fonts.css" />
+    <link rel="stylesheet" href="/static/customer.css?v=6" />
+  </head>
+  <body>
+    <main class="portal-shell">
+      <header class="portal-brand">
+        <div class="portal-mark">坤</div>
+        <div>
+          <strong>坤元骨道</strong>
+          <small>顾客养护服务</small>
+        </div>
+      </header>
+
+      <section class="auth-card" id="auth-view">
+        <div>
+          <h1>查看您的预约与养护记录</h1>
+          <p>请使用理疗师提供的邀请码首次注册，之后使用手机号和密码登录。</p>
+        </div>
+
+        <div class="auth-tabs">
+          <button class="active" id="login-tab" type="button">登录</button>
+          <button id="register-tab" type="button">首次注册</button>
+          <button id="reset-tab" type="button">忘记密码</button>
+        </div>
+
+        <form class="portal-form" id="login-form">
+          <label>
+            <span>手机号</span>
+            <input
+              name="phone"
+              type="tel"
+              inputmode="numeric"
+              autocomplete="username"
+              required
+              placeholder="请输入登记手机号"
+            />
+          </label>
+          <label>
+            <span>密码</span>
+            <input
+              name="password"
+              type="password"
+              autocomplete="current-password"
+              required
+              placeholder="请输入密码"
+            />
+          </label>
+          <button class="portal-primary" type="submit">登录</button>
+        </form>
+
+        <form class="portal-form is-hidden" id="register-form">
+          <label>
+            <span>理疗师提供的邀请码</span>
+            <input
+              name="invite_code"
+              autocomplete="off"
+              required
+              placeholder="请输入邀请码"
+            />
+          </label>
+          <label>
+            <span>登记手机号后四位</span>
+            <input
+              name="phone_last4"
+              type="text"
+              inputmode="numeric"
+              pattern="\d{4}"
+              maxlength="4"
+              required
+              placeholder="如 0021"
+            />
+          </label>
+          <label>
+            <span>设置密码</span>
+            <input
+              name="password"
+              type="password"
+              minlength="8"
+              autocomplete="new-password"
+              required
+              placeholder="至少 8 位"
+            />
+          </label>
+          <section class="portal-privacy-card" aria-labelledby="privacy-title">
+            <h3 id="privacy-title">注册前请阅读个人信息处理说明</h3>
+            <p class="portal-privacy-loading" id="privacy-loading">
+              正在读取隐私说明…
+            </p>
+            <div class="portal-privacy-content is-hidden" id="privacy-content">
+              <dl>
+                <div>
+                  <dt>处理用途</dt>
+                  <dd id="privacy-purpose"></dd>
+                </div>
+                <div>
+                  <dt>保存期限</dt>
+                  <dd id="privacy-retention"></dd>
+                </div>
+                <div>
+                  <dt>删除规则</dt>
+                  <dd id="privacy-deletion-rule"></dd>
+                </div>
+                <div>
+                  <dt>隐私联系人</dt>
+                  <dd id="privacy-contact"></dd>
+                </div>
+              </dl>
+              <small id="privacy-version"></small>
+              <label class="portal-consent-check">
+                <input
+                  id="privacy-consent"
+                  name="privacy_consent"
+                  type="checkbox"
+                  value="true"
+                  required
+                  disabled
+                />
+                <span>我已阅读并同意以上个人信息处理说明</span>
+              </label>
+            </div>
+          </section>
+          <button class="portal-primary" type="submit">注册并绑定</button>
+        </form>
+
+        <form class="portal-form is-hidden" id="reset-form">
+          <div class="portal-form-note">
+            本系统不发送短信。请先到门店核验身份，由理疗师生成一次性找回码。
+          </div>
+          <label>
+            <span>登记手机号</span>
+            <input
+              name="phone"
+              type="tel"
+              inputmode="numeric"
+              autocomplete="username"
+              required
+              placeholder="请输入登记手机号"
+            />
+          </label>
+          <label>
+            <span>理疗师提供的找回码</span>
+            <input
+              name="recovery_code"
+              autocomplete="one-time-code"
+              required
+              placeholder="请输入一次性找回码"
+            />
+          </label>
+          <label>
+            <span>设置新密码</span>
+            <input
+              name="new_password"
+              type="password"
+              minlength="8"
+              autocomplete="new-password"
+              required
+              placeholder="至少 8 位"
+            />
+          </label>
+          <button class="portal-primary" type="submit">重置密码</button>
+        </form>
+
+        <p class="portal-error" id="auth-error"></p>
+        <p class="portal-privacy">
+          本页面仅供查看自己的预约和养护记录。健康资料属于敏感个人信息，
+          请勿向他人转发账号。
+        </p>
+      </section>
+
+      <section class="portal-dashboard is-hidden" id="portal-view">
+        <header class="portal-user-head">
+          <div>
+            <h1 id="portal-name">您好</h1>
+            <p id="portal-phone"></p>
+          </div>
+          <button class="portal-logout" id="portal-logout" type="button">
+            退出
+          </button>
+        </header>
+
+        <div class="portal-summary">
+          <div class="portal-balance">
+            <span>剩余次数</span>
+            <strong id="portal-remaining">0</strong>
+            <small id="portal-course">未选择疗程</small>
+          </div>
+        </div>
+
+        <details class="portal-handout-details" id="portal-handout-details">
+          <summary>
+            <div>
+              <strong>居家养护说明</strong>
+            </div>
+            <span>点击展开</span>
+          </summary>
+          <div class="portal-handout-body">
+            <p class="portal-handout-loading" id="portal-handout-loading">
+              正在读取养护说明…
+            </p>
+            <pre id="portal-handout-content"></pre>
+          </div>
+        </details>
+
+        <section class="portal-section">
+          <div class="portal-section-head portal-schedule-head">
+            <div>
+              <p class="portal-eyebrow">THERAPIST SCHEDULE</p>
+              <h2>理疗师日程</h2>
+            </div>
+            <input id="portal-schedule-date" type="date" aria-label="选择日程日期" />
+          </div>
+          <div class="portal-schedule-legend">
+            <span class="available">可预约</span>
+            <span class="booked">已预约</span>
+            <span class="completed">已完成</span>
+            <span class="closed">不可预约</span>
+          </div>
+          <div class="portal-schedule" id="portal-schedule"></div>
+        </section>
+
+        <section class="portal-section">
+          <div class="portal-section-head">
+            <div>
+              <h2>我的预约</h2>
+            </div>
+          </div>
+          <div class="portal-list" id="portal-appointments"></div>
+        </section>
+
+        <section class="portal-section">
+          <div class="portal-section-head">
+            <div>
+              <h2>复诊安排</h2>
+            </div>
+          </div>
+          <div class="portal-list" id="portal-followups"></div>
+        </section>
+
+        <section class="portal-section">
+          <div class="portal-section-head">
+            <div>
+              <h2>我的接诊摘要</h2>
+            </div>
+          </div>
+          <div class="portal-visit-list" id="portal-visits"></div>
+        </section>
+
+        <details class="portal-account-settings" id="portal-account-settings">
+          <summary>
+            <div>
+              <strong>账号与隐私</strong>
+              <small id="portal-account-status">修改密码、解绑或申请删除资料</small>
+            </div>
+            <span>点击展开</span>
+          </summary>
+          <div class="portal-account-settings-body">
+            <form class="portal-form" id="portal-password-form">
+              <h3>修改密码</h3>
+              <label>
+                <span>当前密码</span>
+                <input
+                  name="current_password"
+                  type="password"
+                  autocomplete="current-password"
+                  required
+                />
+              </label>
+              <label>
+                <span>新密码</span>
+                <input
+                  name="new_password"
+                  type="password"
+                  minlength="8"
+                  autocomplete="new-password"
+                  required
+                  placeholder="至少 8 位"
+                />
+              </label>
+              <button class="portal-secondary" type="submit">修改密码</button>
+            </form>
+
+            <form class="portal-form" id="portal-unbind-form">
+              <h3>解绑网页账号</h3>
+              <p>解绑后账号立即退出，但门店接诊档案不会被删除。</p>
+              <label>
+                <span>当前密码</span>
+                <input
+                  name="current_password"
+                  type="password"
+                  autocomplete="current-password"
+                  required
+                />
+              </label>
+              <button class="portal-danger" type="submit">解绑账号</button>
+            </form>
+
+            <form class="portal-form" id="portal-deletion-form">
+              <h3>申请删除个人资料</h3>
+              <p>
+                提交后由理疗师核验并处理。同意后会清除账号、接诊、预约、复诊、
+                养护说明和客户身份资料，无法撤销；已有备份文件不会自动清除。
+              </p>
+              <label>
+                <span>当前密码</span>
+                <input
+                  name="current_password"
+                  type="password"
+                  autocomplete="current-password"
+                  required
+                />
+              </label>
+              <label>
+                <span>申请原因（可不填）</span>
+                <textarea name="reason" rows="3" maxlength="500"></textarea>
+              </label>
+              <button class="portal-danger" type="submit">提交删除申请</button>
+            </form>
+          </div>
+        </details>
+
+        <p class="portal-disclaimer">
+          本页面仅作理疗养护记录查看，不构成医疗诊断，不能替代医院检查与医生诊疗。
+        </p>
+      </section>
+    </main>
+
+    <div class="portal-toast" id="portal-toast" role="status"></div>
+    <script src="/static/customer.js?v=6"></script>
+  </body>
+</html>

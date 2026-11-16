@@ -1,0 +1,19 @@
+{
+  "name": "坤元骨道",
+  "short_name": "坤元骨道",
+  "description": "坤元骨道门店理疗师客户、接诊、风险与知识辅助工作台",
+  "lang": "zh-CN",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#f4f1ea",
+  "theme_color": "#0f6557",
+  "icons": [
+    {
+      "src": "/static/icon.svg?v=8",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

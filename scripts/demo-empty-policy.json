@@ -1,0 +1,12 @@
+{
+  "version": "demo-empty",
+  "updated_at": "2026-11-15",
+  "default": {
+    "authority_level": "D",
+    "authority_rank": 30,
+    "source_type": "unclassified",
+    "label": "演示环境未加载门店知识",
+    "owner": "演示环境"
+  },
+  "sources": []
+}

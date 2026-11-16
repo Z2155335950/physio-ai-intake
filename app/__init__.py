@@ -1,0 +1,2 @@
+"""Physiotherapy assistant application package."""
+

@@ -1,0 +1,1403 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
+    <meta
+      name="description"
+      content="坤元骨道门店理疗师的养护知识检索、风险提醒与沟通辅助工作台"
+    />
+    <meta name="theme-color" content="#0f6557" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="坤元骨道" />
+    <title>坤元骨道</title>
+    <script>
+      (() => {
+        const params = new URLSearchParams(window.location.search);
+        const phoneUserAgent = /Android|iPhone|iPod|Mobile|Windows Phone/i.test(
+          navigator.userAgent,
+        );
+        const compactTouch =
+          window.matchMedia("(max-width: 900px)").matches &&
+          navigator.maxTouchPoints > 0;
+        if (
+          params.get("view") !== "mobile" &&
+          !phoneUserAgent &&
+          !compactTouch
+        ) {
+          window.location.replace("/");
+        }
+      })();
+    </script>
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="icon" href="/static/icon.svg?v=8" type="image/svg+xml" />
+    <link rel="stylesheet" href="/static/fonts.css" />
+    <link rel="stylesheet" href="/static/styles.css?v=12" />
+    <link rel="stylesheet" href="/static/mobile.css?v=10" />
+  </head>
+  <body class="mobile-page">
+    <div class="offline-banner is-hidden" id="offline-banner">
+      <strong>当前处于弱网或离线状态</strong>
+      <span>客户档案、接诊记录和本地知识检索仍可正常使用。</span>
+    </div>
+    <div class="app-shell">
+      <aside class="sidebar" aria-label="侧边导航">
+        <div class="brand">
+          <div class="brand-mark" aria-hidden="true">
+            坤
+          </div>
+          <div>
+            <strong>坤元骨道</strong>
+          </div>
+          <button
+            class="mobile-nav-close"
+            id="mobile-nav-close"
+            type="button"
+            aria-label="关闭菜单"
+          >
+            ×
+          </button>
+        </div>
+
+        <button class="dashboard-nav active" id="open-dashboard" type="button">
+          <span>⌂</span>
+          今日工作台
+        </button>
+
+        <button class="dashboard-nav" id="open-pdf-intake" type="button">
+          PDF 智能录入
+        </button>
+
+        <button class="dashboard-nav" id="open-appointment-management" type="button">
+          预约管理
+        </button>
+
+        <button class="dashboard-nav" id="open-backups" type="button">
+          备份与恢复
+        </button>
+
+        <button class="dashboard-nav" id="open-portal-admin" type="button">
+          顾客网页账号
+        </button>
+
+        <button class="dashboard-nav is-hidden" id="open-staff-management" type="button">
+          <span>员</span>
+          员工管理
+        </button>
+
+        <button class="dashboard-nav is-hidden" id="staff-logout" type="button">
+          <span>出</span>
+          退出员工登录
+        </button>
+
+        <button
+          class="mobile-desktop-switch"
+          id="mobile-desktop-switch"
+          type="button"
+        >
+          切换电脑版
+        </button>
+
+        <div class="scope-note">
+          <div class="scope-icon">!</div>
+          <p>
+            仅作养护参考，不做医疗诊断，不承诺疗效。高风险情形优先建议医院排查。
+          </p>
+        </div>
+
+        <div class="runtime-card">
+          <div class="runtime-row">
+            <span class="status-dot" id="status-dot"></span>
+            <span id="runtime-label">正在连接服务…</span>
+          </div>
+          <div class="runtime-meta" id="runtime-meta">读取知识库中</div>
+          <div class="runtime-meta" id="staff-session-label"></div>
+        </div>
+      </aside>
+      <button
+        class="mobile-nav-scrim"
+        id="mobile-nav-scrim"
+        type="button"
+        aria-label="关闭菜单"
+      ></button>
+
+      <main class="workspace">
+        <header class="topbar">
+          <button
+            class="mobile-menu-button"
+            id="mobile-menu-button"
+            type="button"
+            aria-label="打开菜单"
+            aria-expanded="false"
+          >
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M4 7h16M4 12h16M4 17h16" />
+            </svg>
+          </button>
+          <div>
+            <p class="eyebrow" id="view-eyebrow">坤元骨道 · 门店工作台</p>
+            <h1 id="view-title">今日工作台</h1>
+          </div>
+          <div class="topbar-actions">
+            <button class="outline-button mobile-only" id="topbar-dashboard" type="button">
+              工作台
+            </button>
+            <button class="outline-button mobile-only" id="topbar-appointments" type="button">
+              预约
+            </button>
+            <button class="customer-pill" id="open-customers" type="button">
+              <span class="customer-pill-icon">客</span>
+              <span class="customer-pill-copy">
+                <small>当前客户</small>
+                <strong id="active-customer-name">未绑定</strong>
+              </span>
+            </button>
+            <button class="outline-button is-hidden" id="toggle-sources" type="button">
+              知识来源 <span id="source-count">0</span>
+            </button>
+            <div class="avatar" aria-label="当前用户">理</div>
+          </div>
+        </header>
+
+        <section class="dashboard-panel" id="dashboard-view">
+          <div class="dashboard-hero">
+            <div>
+              <h2>今天先处理什么，一眼看清。</h2>
+              <p id="dashboard-date">正在读取今日安排…</p>
+            </div>
+            <div class="dashboard-actions">
+              <button class="outline-button" id="dashboard-open-appointments" type="button">
+                预约管理
+              </button>
+              <button class="outline-button" id="dashboard-open-backups" type="button">
+                数据安全
+              </button>
+              <button class="outline-button" id="dashboard-open-pdf-intake" type="button">
+                PDF 智能录入
+              </button>
+              <button class="outline-button" id="refresh-dashboard" type="button">
+                刷新
+              </button>
+              <button class="primary-button" id="start-consultation" type="button">
+                知识检索
+              </button>
+            </div>
+          </div>
+
+          <div class="quick-customer-search">
+            <div>
+              <span>手机号后四位找客户</span>
+              <input
+                id="quick-customer-search"
+                type="search"
+                inputmode="numeric"
+                maxlength="4"
+                autocomplete="off"
+                placeholder="输入后四位，如 0021"
+                aria-label="手机号后四位查找客户"
+              />
+            </div>
+            <div class="quick-search-results" id="quick-search-results"></div>
+          </div>
+
+          <div class="dashboard-metrics">
+            <button class="metric-card metric-appointments" type="button" data-scroll="appointments-section">
+              <span>今日预约</span>
+              <strong id="metric-appointments">0</strong>
+              <small>按时段查看顾客</small>
+            </button>
+            <button class="metric-card metric-followups" type="button" data-scroll="followups-section">
+              <span>待复诊</span>
+              <strong id="metric-followups">0</strong>
+              <small>含逾期任务</small>
+            </button>
+            <button class="metric-card metric-sessions" type="button" data-scroll="sessions-section">
+              <span>次数不足</span>
+              <strong id="metric-sessions">0</strong>
+              <small>剩余两次及以内</small>
+            </button>
+            <button class="metric-card metric-risks" type="button" data-scroll="risks-section">
+              <span>近期风险</span>
+              <strong id="metric-risks">0</strong>
+              <small>近 30 天记录</small>
+            </button>
+          </div>
+
+          <div class="dashboard-grid">
+            <section class="workbench-section appointments-section" id="appointments-section">
+              <div class="workbench-section-head">
+                <div>
+                  <h3>今日预约客户</h3>
+                </div>
+              </div>
+              <div class="workbench-list" id="dashboard-appointments"></div>
+            </section>
+
+            <section class="workbench-section followups-section" id="followups-section">
+              <div class="workbench-section-head">
+                <div>
+                  <h3>待复诊客户</h3>
+                </div>
+              </div>
+              <div class="workbench-list" id="dashboard-followups"></div>
+            </section>
+
+            <section class="workbench-section risks-section" id="risks-section">
+              <div class="workbench-section-head">
+                <div>
+                  <h3>近期风险标记</h3>
+                </div>
+              </div>
+              <div class="workbench-list" id="dashboard-risks"></div>
+            </section>
+
+            <section class="workbench-section sessions-section" id="sessions-section">
+              <div class="workbench-section-head">
+                <div>
+                  <h3>剩余次数不足</h3>
+                </div>
+              </div>
+              <div class="workbench-list" id="dashboard-sessions"></div>
+            </section>
+
+            <section class="workbench-section recent-section" id="recent-section">
+              <div class="workbench-section-head">
+                <div>
+                  <h3>上次接诊摘要</h3>
+                </div>
+              </div>
+              <div class="workbench-list recent-list" id="dashboard-recent"></div>
+            </section>
+          </div>
+
+          <section class="knowledge-hub" id="knowledge-hub">
+            <div class="knowledge-hub-head">
+              <div>
+                <h3>门店知识检索</h3>
+                <p>直接搜索解剖、风险、价格、预约规则和沟通模板，不连接大模型。</p>
+              </div>
+            </div>
+            <form class="knowledge-search-form" id="knowledge-search-form">
+              <input
+                id="knowledge-search-input"
+                type="search"
+                maxlength="4000"
+                placeholder="输入关键词，例如：腰椎正骨禁忌、骨盆修复价格"
+                aria-label="知识检索关键词"
+              />
+              <button class="primary-button" id="knowledge-search-button" type="submit">
+                检索知识
+              </button>
+            </form>
+            <div class="knowledge-results" id="knowledge-results">
+              <div class="workbench-empty">
+                输入关键词后，这里会直接显示门店知识内容和来源。
+              </div>
+            </div>
+          </section>
+        </section>
+
+        <section
+          class="appointment-management-view is-hidden"
+          id="appointment-management-view"
+        >
+          <div class="appointment-page-hero">
+            <div>
+              <p class="eyebrow">APPOINTMENT DESK</p>
+              <h2>先选时间，再选顾客</h2>
+              <p>
+                每天的开始时间、结束时间和时段长度可以调整。点击一个可预约时段，
+                再从客户档案中选择顾客完成预约。
+              </p>
+            </div>
+            <button class="outline-button" id="refresh-appointment-page" type="button">
+              刷新当天安排
+            </button>
+          </div>
+
+          <form class="appointment-page-config" id="appointment-schedule-form">
+            <label>
+              <span>预约日期</span>
+              <input name="schedule_date" type="date" required />
+            </label>
+            <label>
+              <span>开始时间</span>
+              <input name="start_time" type="time" value="09:00" required />
+            </label>
+            <label>
+              <span>结束时间</span>
+              <input name="end_time" type="time" value="18:00" required />
+            </label>
+            <label>
+              <span>每个时段</span>
+              <select name="interval_minutes">
+                <option value="30">30 分钟</option>
+                <option value="45">45 分钟</option>
+                <option value="60" selected>60 分钟</option>
+                <option value="90">90 分钟</option>
+              </select>
+            </label>
+            <button class="primary-button" id="save-appointment-schedule" type="submit">
+              生成 / 更新时段
+            </button>
+          </form>
+
+          <div class="appointment-page-layout">
+            <section class="appointment-calendar-card">
+              <div class="appointment-calendar-head">
+                <div>
+                  <h3 id="appointment-selected-date">今日时段</h3>
+                  <p>可预约、已预约、已完成和关闭状态会实时显示。</p>
+                </div>
+                <div class="appointment-page-legend">
+                  <span class="available">可预约</span>
+                  <span class="booked">已预约</span>
+                  <span class="completed">已完成</span>
+                  <span class="closed">已关闭</span>
+                </div>
+              </div>
+              <div class="appointment-page-slots" id="appointment-page-slots">
+                <div class="workbench-empty">正在读取当天时段…</div>
+              </div>
+            </section>
+
+            <aside class="appointment-booking-card">
+              <div class="appointment-booking-empty" id="appointment-booking-empty">
+                <span>时</span>
+                <h3>选择一个时段</h3>
+                <p>可预约时段会显示客户选择器；已预约时段可以完成或取消。</p>
+              </div>
+
+              <div class="appointment-booking-panel is-hidden" id="appointment-booking-panel">
+                <div class="appointment-booking-head">
+                  <p class="eyebrow">NEW APPOINTMENT</p>
+                  <h3 id="appointment-booking-time"></h3>
+                  <p>从客户档案中选择本次预约的顾客。</p>
+                </div>
+                <label class="appointment-field">
+                  <span>查找客户</span>
+                  <input
+                    id="appointment-customer-search"
+                    type="search"
+                    placeholder="输入姓名或手机号后四位"
+                    autocomplete="off"
+                  />
+                </label>
+                <div class="appointment-customer-picker" id="appointment-customer-picker"></div>
+                <label class="appointment-field">
+                  <span>预约项目</span>
+                  <input id="appointment-service-item" maxlength="300" placeholder="例如：腰部调理" />
+                </label>
+                <label class="appointment-field">
+                  <span>预约备注</span>
+                  <textarea
+                    id="appointment-note"
+                    rows="3"
+                    maxlength="2000"
+                    placeholder="例如：顾客会提前十分钟到店"
+                  ></textarea>
+                </label>
+                <button class="primary-button appointment-book-button" id="book-appointment" type="button" disabled>
+                  确认预约
+                </button>
+              </div>
+
+              <div class="appointment-existing is-hidden" id="appointment-existing">
+                <p class="eyebrow">BOOKED APPOINTMENT</p>
+                <h3 id="appointment-existing-name"></h3>
+                <p id="appointment-existing-meta"></p>
+                <p id="appointment-existing-note"></p>
+                <div class="appointment-existing-actions" id="appointment-existing-actions">
+                  <button class="primary-button" id="complete-page-appointment" type="button">
+                    标记完成
+                  </button>
+                  <button class="outline-button danger-text" id="cancel-page-appointment" type="button">
+                    取消预约
+                  </button>
+                </div>
+              </div>
+            </aside>
+          </div>
+
+          <section class="appointment-day-section">
+            <div class="workbench-section-head">
+              <div>
+                <h3>当天预约清单</h3>
+              </div>
+            </div>
+            <div class="appointment-day-list" id="appointment-day-list"></div>
+          </section>
+        </section>
+
+        <section class="chat-panel is-hidden" id="chat-panel" aria-live="polite">
+          <div class="messages" id="messages">
+            <article class="welcome-card" id="welcome-card">
+              <div class="welcome-copy">
+                <h2>把复杂情况，整理成可核验的工作思路。</h2>
+                <p>
+                  输入解剖、风险、价格或沟通关键词。内容直接取自本地门店知识库，
+                  不连接外部大模型，并保留来源和权威等级。
+                </p>
+              </div>
+              <div class="prompt-grid">
+                <button class="prompt-card" type="button">
+                  <span>风险自查</span>
+                  <strong>血压 165/102 的顾客可以做颈椎正骨吗？</strong>
+                </button>
+                <button class="prompt-card" type="button">
+                  <span>评估思路</span>
+                  <strong>久坐后单侧腰酸，理疗师应如何做基础评估？</strong>
+                </button>
+                <button class="prompt-card" type="button">
+                  <span>门店规则</span>
+                  <strong>骨盆修复（产康）的价格和次数是什么？</strong>
+                </button>
+                <button class="prompt-card" type="button">
+                  <span>沟通话术</span>
+                  <strong>骨质疏松顾客坚持正骨，如何委婉拒绝？</strong>
+                </button>
+              </div>
+            </article>
+          </div>
+
+          <div class="composer-wrap">
+            <form class="composer" id="chat-form">
+              <textarea
+                id="message-input"
+                rows="1"
+                maxlength="4000"
+                placeholder="输入要检索的门店知识、规则或话术关键词…"
+                aria-label="消息内容"
+              ></textarea>
+              <div class="composer-footer">
+                <div class="composer-buttons">
+                  <button class="send-button" id="send-button" type="submit">
+                    <span>检索</span>
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M5 12h13M13 6l6 6-6 6" />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </form>
+            <p class="disclaimer-line">
+              输出仅供理疗养护参考，不构成医疗诊断，不能替代医院检查与医生诊疗。
+            </p>
+          </div>
+        </section>
+
+        <aside class="source-panel" id="source-panel" aria-label="知识来源">
+          <div class="source-panel-head">
+            <div>
+              <h2>知识来源</h2>
+            </div>
+            <button class="icon-button" id="close-sources" type="button">×</button>
+          </div>
+          <div class="source-list" id="source-list">
+            <div class="source-empty">
+              <span>⌁</span>
+              <p>完成一次回答后，这里会展示命中的门店知识片段。</p>
+            </div>
+          </div>
+        </aside>
+      </main>
+    </div>
+
+    <dialog class="customer-dialog" id="customer-dialog">
+      <div class="customer-dialog-shell">
+        <header class="customer-dialog-head">
+          <div>
+            <h2>客户档案与接诊记忆</h2>
+            <p>客户资料和接诊调查分别保存，聊天只读取当前选中客户。</p>
+          </div>
+          <div class="customer-dialog-head-actions">
+            <button
+              class="mobile-customer-switch"
+              id="mobile-customer-switch"
+              type="button"
+            >
+              切换客户
+            </button>
+            <button class="dialog-close" id="close-customers" type="button">×</button>
+          </div>
+        </header>
+
+        <div class="customer-dialog-body">
+          <aside class="customer-directory">
+            <div class="directory-tools">
+              <input
+                id="customer-search"
+                type="search"
+                placeholder="姓名 / 手机号后四位"
+                aria-label="搜索客户"
+              />
+              <button id="new-customer" type="button">＋ 新客户</button>
+            </div>
+            <div class="customer-list" id="customer-list"></div>
+          </aside>
+
+          <section class="customer-workbench">
+            <div class="customer-empty" id="customer-empty">
+              <span>记</span>
+              <h3>选择或新建一个客户</h3>
+              <p>每个客户拥有独立的长期记忆和接诊调查时间线。</p>
+            </div>
+
+            <form class="profile-form is-hidden" id="profile-form">
+              <div class="workbench-title">
+                <div>
+                  <h3 id="profile-form-title">新建客户</h3>
+                </div>
+                <button class="text-button" id="cancel-profile" type="button">
+                  取消
+                </button>
+              </div>
+              <div class="form-grid">
+                <label class="span-2">
+                  <span>姓名 *</span>
+                  <input name="name" required maxlength="80" />
+                </label>
+                <label>
+                  <span>性别</span>
+                  <input name="gender" maxlength="20" />
+                </label>
+                <label>
+                  <span>年龄</span>
+                  <input name="age" maxlength="20" />
+                </label>
+                <label>
+                  <span>联系电话</span>
+                  <input name="phone" maxlength="40" />
+                </label>
+                <label>
+                  <span>职业</span>
+                  <input name="occupation" maxlength="100" />
+                </label>
+                <label class="span-2">
+                  <span>住址</span>
+                  <input name="address" maxlength="300" />
+                </label>
+                <label class="span-2">
+                  <span>客户现存问题</span>
+                  <textarea
+                    name="health_issues"
+                    rows="3"
+                    maxlength="4000"
+                    placeholder="例如：长期颈肩僵硬、右侧腰部酸胀、睡眠时偶有不适"
+                  ></textarea>
+                </label>
+                <label class="span-2">
+                  <span>历史病例</span>
+                  <textarea
+                    name="historical_cases"
+                    rows="4"
+                    maxlength="8000"
+                    placeholder="记录既往外伤、手术、基础病、医院检查或既往调理情况"
+                  ></textarea>
+                </label>
+                <label>
+                  <span>选择疗程</span>
+                  <input
+                    name="selected_course"
+                    maxlength="300"
+                    placeholder="例如：骨盆修复 10 次疗程"
+                  />
+                </label>
+                <label>
+                  <span>疗程剩余次数</span>
+                  <input
+                    name="remaining_sessions"
+                    type="number"
+                    min="0"
+                    max="10000"
+                    step="1"
+                    value="0"
+                  />
+                </label>
+                <label class="span-2">
+                  <span>客户备注</span>
+                  <textarea name="notes" rows="3" maxlength="2000"></textarea>
+                </label>
+              </div>
+              <div class="form-actions">
+                <button class="primary-button" type="submit">保存客户资料</button>
+              </div>
+            </form>
+
+            <div class="customer-detail is-hidden" id="customer-detail">
+              <div class="customer-summary">
+                <div class="customer-avatar" id="customer-avatar">客</div>
+                <div class="customer-summary-copy">
+                  <div class="customer-name-row">
+                    <h3 id="customer-detail-name"></h3>
+                    <span id="customer-detail-type">客户档案</span>
+                  </div>
+                  <p id="customer-detail-meta"></p>
+                  <p id="customer-detail-notes"></p>
+                  <div class="customer-facts">
+                    <div>
+                      <span>现存问题</span>
+                      <p id="customer-detail-health"></p>
+                    </div>
+                    <div>
+                      <span>历史病例</span>
+                      <p id="customer-detail-history"></p>
+                    </div>
+                    <div>
+                      <span>所选疗程</span>
+                      <p id="customer-detail-course"></p>
+                    </div>
+                    <div class="course-remaining">
+                      <span>剩余次数</span>
+                      <p id="customer-detail-remaining"></p>
+                    </div>
+                  </div>
+                  <div class="quick-clinical-grid">
+                    <div class="quick-clinical-card risk-card" id="quick-risk-card">
+                      <span>主要风险</span>
+                      <p id="customer-detail-risk"></p>
+                    </div>
+                    <div class="quick-clinical-card">
+                      <span>上次主诉</span>
+                      <p id="customer-last-complaint"></p>
+                    </div>
+                    <div class="quick-clinical-card">
+                      <span>复诊反馈</span>
+                      <p id="customer-last-feedback"></p>
+                    </div>
+                    <div class="quick-clinical-card danger-card" id="quick-danger-card">
+                      <span>最近危险信号</span>
+                      <p id="customer-danger-signal"></p>
+                    </div>
+                  </div>
+                  <details class="profile-history-details">
+                    <summary>展开完整现存问题与历史病例</summary>
+                    <div>
+                      <span>现存问题</span>
+                      <p id="customer-detail-health-full"></p>
+                    </div>
+                    <div>
+                      <span>历史病例</span>
+                      <p id="customer-detail-history-full"></p>
+                    </div>
+                  </details>
+                  <div class="customer-quick-actions">
+                    <button class="outline-button" id="create-portal-invite" type="button">
+                      生成顾客网页邀请码
+                    </button>
+                    <button class="primary-button" id="copy-customer-script" type="button">
+                      复制顾客版话术
+                    </button>
+                    <button class="outline-button" id="edit-customer-handout" type="button">
+                      编辑居家养护说明
+                    </button>
+                  </div>
+                </div>
+                <button class="outline-button" id="edit-profile" type="button">
+                  编辑资料
+                </button>
+              </div>
+
+              <div class="timeline-head">
+                <div>
+                  <h3>接诊历史（点击展开）</h3>
+                </div>
+                <div class="timeline-actions">
+                  <button class="primary-button" id="new-investigation" type="button">
+                    ＋ 新增接诊记录
+                  </button>
+                </div>
+              </div>
+
+              <form class="investigation-form is-hidden" id="investigation-form">
+                <div class="form-grid">
+                  <label>
+                    <span>接诊日期 *</span>
+                    <input name="visit_date" type="date" required />
+                  </label>
+                  <label>
+                    <span>本次类型</span>
+                    <select name="visit_type">
+                      <option>初诊</option>
+                      <option>复诊</option>
+                    </select>
+                  </label>
+                  <label class="span-2">
+                    <span>主诉 *</span>
+                    <textarea
+                      name="chief_complaint"
+                      rows="3"
+                      required
+                      maxlength="3000"
+                      placeholder="主要不适、持续时长、诱发因素"
+                    ></textarea>
+                  </label>
+                  <label>
+                    <span>持续时长</span>
+                    <input name="symptom_duration" maxlength="500" />
+                  </label>
+                  <label>
+                    <span>诱发因素</span>
+                    <input
+                      name="trigger"
+                      maxlength="500"
+                      placeholder="劳累 / 受凉 / 外伤 / 不明原因"
+                    />
+                  </label>
+                  <label class="span-2" data-optional="true">
+                    <span>现病史</span>
+                    <textarea
+                      name="current_history"
+                      rows="3"
+                      maxlength="4000"
+                      placeholder="疼痛位置、性质、加重缓解条件、既往调理情况"
+                    ></textarea>
+                  </label>
+                  <label class="span-2" data-optional="true">
+                    <span>既往史问询核对</span>
+                    <textarea
+                      name="medical_history"
+                      rows="3"
+                      maxlength="4000"
+                      placeholder="外伤、手术、基础病、抗凝药、肿瘤结核史等"
+                    ></textarea>
+                  </label>
+                  <label class="span-2" data-optional="true">
+                    <span>女性专项</span>
+                    <textarea
+                      name="women_special"
+                      rows="2"
+                      maxlength="2000"
+                      placeholder="怀孕、备孕、经期及经量等"
+                    ></textarea>
+                  </label>
+                  <label class="span-2" data-optional="true">
+                    <span>查体记录</span>
+                    <textarea
+                      name="objective_findings"
+                      rows="3"
+                      maxlength="4000"
+                      placeholder="体态、压痛、活动受限、肌力、麻木区域；只写客观记录"
+                    ></textarea>
+                  </label>
+                  <label class="span-2">
+                    <span>风险评估结果</span>
+                    <select name="risk_assessment">
+                      <option value="">未记录</option>
+                      <option>适合常规筋膜放松调理</option>
+                      <option>相对禁忌，建议医院评估，仅轻柔放松，禁用扳法复位</option>
+                      <option>绝对禁忌，不做正骨复位，建议前往医院就诊</option>
+                    </select>
+                  </label>
+                  <label class="span-2" data-optional="true">
+                    <span>调理方案</span>
+                    <textarea
+                      name="care_plan"
+                      rows="3"
+                      maxlength="4000"
+                      placeholder="部位、操作方式、时长、频次建议"
+                    ></textarea>
+                  </label>
+                  <label class="span-2" data-optional="true">
+                    <span>告知内容登记</span>
+                    <textarea
+                      name="disclosure"
+                      rows="2"
+                      maxlength="2000"
+                      placeholder="已告知正常反应、禁忌事项、危险预警信号"
+                    ></textarea>
+                  </label>
+                  <label>
+                    <span>本次使用疗程次数</span>
+                    <input
+                      name="sessions_used"
+                      type="number"
+                      min="0"
+                      max="100"
+                      step="1"
+                      value="0"
+                    />
+                  </label>
+                  <label>
+                    <span>下次复诊日期</span>
+                    <input name="followup_date" type="date" />
+                  </label>
+                  <label class="span-2">
+                    <span>复诊提醒备注</span>
+                    <input
+                      name="followup_note"
+                      maxlength="2000"
+                      placeholder="例如：一周后回访腰部舒展情况"
+                    />
+                  </label>
+                  <label data-optional="true">
+                    <span>顾客签字</span>
+                    <input name="customer_signature" maxlength="120" />
+                  </label>
+                  <label data-optional="true">
+                    <span>调理师签字</span>
+                    <input name="therapist_signature" maxlength="120" />
+                  </label>
+                  <label class="span-2" data-optional="true">
+                    <span>复诊备注</span>
+                    <textarea
+                      name="followup_notes"
+                      rows="3"
+                      maxlength="3000"
+                      placeholder="上次调理后感受、变化、异常反应、下次调整思路"
+                    ></textarea>
+                  </label>
+                </div>
+                <div class="form-actions">
+                  <button class="text-button optional-fields-toggle" id="toggle-optional-fields" type="button">
+                    补充更多信息
+                  </button>
+                  <button class="text-button" id="cancel-investigation" type="button">
+                    取消
+                  </button>
+                  <button class="primary-button" type="submit">保存接诊记录</button>
+                </div>
+              </form>
+
+              <div class="visit-confirmation is-hidden" id="visit-confirmation">
+                <div class="confirmation-head">
+                  <h3>确认完成本次接诊</h3>
+                  <p>确认后才会保存记录、扣减剩余次数并创建复诊任务。</p>
+                </div>
+                <div class="confirmation-grid">
+                  <div>
+                    <span>当前剩余</span>
+                    <strong id="confirm-previous-sessions">0</strong>
+                  </div>
+                  <div>
+                    <span>本次使用</span>
+                    <strong id="confirm-used-sessions">0</strong>
+                  </div>
+                  <div>
+                    <span>确认后剩余</span>
+                    <strong id="confirm-remaining-sessions">0</strong>
+                  </div>
+                  <div>
+                    <span>下次复诊</span>
+                    <strong id="confirm-followup-date">未设置</strong>
+                  </div>
+                </div>
+                <div class="confirmation-summary">
+                  <span id="confirm-visit-type"></span>
+                  <p id="confirm-chief-complaint"></p>
+                </div>
+                <div class="form-actions">
+                  <button class="text-button" id="cancel-confirm-visit" type="button">
+                    返回修改
+                  </button>
+                  <button class="primary-button" id="confirm-visit" type="button">
+                    我确认，执行并保存
+                  </button>
+                </div>
+              </div>
+
+              <div class="investigation-list" id="investigation-list"></div>
+
+              <div class="followup-section is-hidden" id="followup-section">
+                <div class="timeline-head">
+                  <div>
+                    <h3>复诊任务</h3>
+                  </div>
+                </div>
+                <div class="followup-list" id="followup-list"></div>
+              </div>
+
+              <div class="appointment-section is-hidden" id="appointment-section">
+                <div class="timeline-head">
+                  <div>
+                    <h3>客户预约</h3>
+                  </div>
+                </div>
+                <div class="appointment-list" id="appointment-list"></div>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+    </dialog>
+
+    <dialog class="backup-dialog" id="backup-dialog">
+      <div class="backup-dialog-shell">
+        <header class="customer-dialog-head">
+          <div>
+            <h2>备份客户资料</h2>
+            <p>把客户、接诊、预约、疗程次数和复诊资料打包保存，电脑出问题时可以恢复。</p>
+          </div>
+          <button class="dialog-close" id="close-backups" type="button">×</button>
+        </header>
+
+        <div class="backup-dialog-body">
+          <div class="backup-guide">
+            <strong>简单操作</strong>
+            <span>1. 点击“备份全部资料并下载”</span>
+            <span>2. 把下载的文件存到移动存储设备或另一台电脑</span>
+            <span>3. 需要恢复时，在下面选择这个文件</span>
+          </div>
+          <section class="backup-section excel-section">
+            <div class="backup-section-head">
+              <div>
+                <h3>导出理疗师业务表</h3>
+              </div>
+            </div>
+            <p class="backup-help">
+              包含客户、接诊、预约、复诊和自定义养护说明，适合在电脑上查看和统计。
+              表格文件不能用于恢复资料，恢复请使用上面的完整备份。
+            </p>
+            <button class="primary-button" id="export-excel" type="button">
+              导出全部业务数据表
+            </button>
+            <p class="backup-status" id="excel-status">
+              导出文件不包含登录密码、会话令牌或邀请码。
+            </p>
+          </section>
+          <section class="backup-section">
+            <div class="backup-section-head">
+              <div>
+                <h3>备份全部资料</h3>
+              </div>
+            </div>
+            <p class="backup-help">
+              默认直接生成备份文件。如果担心别人打开，可以勾选密码保护；
+              密码一定要记牢，忘记后无法打开该备份。
+            </p>
+            <div class="backup-inline-form">
+              <label class="backup-check">
+                <input id="enable-backup-password" type="checkbox" />
+                <span>给备份设置密码（可选）</span>
+              </label>
+              <input
+                id="backup-password"
+                type="password"
+                minlength="8"
+                autocomplete="new-password"
+                class="is-hidden"
+                placeholder="至少输入 8 位密码"
+              />
+              <button class="primary-button" id="export-backup" type="button">
+                备份全部资料并下载
+              </button>
+            </div>
+            <p class="backup-status" id="backup-status">
+              系统每天会自动保存一份备份；你仍可手动下载一份放到移动存储设备。
+            </p>
+          </section>
+
+          <section class="backup-section">
+            <div class="backup-section-head">
+              <div>
+                <h3>电脑里的自动备份</h3>
+              </div>
+              <button class="text-button" id="refresh-backups" type="button">
+                刷新
+              </button>
+            </div>
+            <p class="backup-help">
+              系统启动和每小时自动清理过期恢复暂存文件。自动、手动和恢复前回滚备份默认保留 30 天。
+            </p>
+            <div class="backup-inline-form">
+              <button class="outline-button" id="run-backup-maintenance" type="button">
+                立即检查并清理
+              </button>
+            </div>
+            <p class="backup-status" id="backup-maintenance-status">
+              过期备份和恢复临时文件会自动清理；也可以立即执行一次。
+            </p>
+            <div class="backup-list" id="backup-list"></div>
+          </section>
+
+          <section class="backup-section restore-section">
+            <div>
+              <h3>用备份文件恢复资料</h3>
+            </div>
+            <p class="backup-help">
+              先选择之前下载的备份文件并检查。确认前不会修改现在电脑里的资料。
+            </p>
+            <div class="backup-inline-form">
+              <input
+                id="restore-file"
+                type="file"
+                accept=".physio-backup,.enc"
+              />
+              <input
+                id="restore-password"
+                type="password"
+                autocomplete="current-password"
+                placeholder="有密码保护的备份才需要填写"
+              />
+              <button class="outline-button" id="preview-restore" type="button">
+                检查备份文件
+              </button>
+            </div>
+            <div class="restore-preview is-hidden" id="restore-preview">
+              <div class="restore-counts">
+                <div><span>客户</span><strong id="restore-count-customers">0</strong></div>
+                <div><span>接诊</span><strong id="restore-count-visits">0</strong></div>
+                <div><span>预约</span><strong id="restore-count-appointments">0</strong></div>
+                <div><span>复诊</span><strong id="restore-count-followups">0</strong></div>
+              </div>
+              <p id="restore-warning"></p>
+              <button class="danger-button" id="confirm-restore" type="button">
+                确认恢复这份备份
+              </button>
+            </div>
+          </section>
+        </div>
+      </div>
+    </dialog>
+
+    <dialog class="invite-dialog" id="invite-dialog">
+      <div class="invite-shell">
+        <button class="dialog-close invite-close" id="close-invite" type="button">×</button>
+        <h2>顾客网页邀请码</h2>
+        <p>邀请码 24 小时内有效且只能使用一次。请线下确认客户身份后发给本人。</p>
+        <div class="invite-code" id="invite-code">--------</div>
+        <div class="invite-link" id="invite-link"></div>
+        <div class="form-actions">
+          <button class="outline-button" id="copy-invite" type="button">
+            复制邀请码
+          </button>
+          <button class="primary-button" id="copy-portal-link" type="button">
+            复制网页链接
+          </button>
+        </div>
+      </div>
+    </dialog>
+
+    <dialog class="staff-login-dialog" id="staff-login-dialog">
+      <form class="staff-login-card" id="staff-login-form">
+        <div class="brand-mark" aria-hidden="true">
+          坤
+        </div>
+        <h2>坤元骨道 · 理疗师登录</h2>
+        <p>请使用管理员为你创建的员工登录名和独立密码。忘记密码请联系管理员重置。</p>
+        <label>
+          <span>员工登录名</span>
+          <input
+            name="username"
+            autocomplete="username"
+            required
+            placeholder="请输入员工登录名"
+          />
+        </label>
+        <label>
+          <span>员工密码</span>
+          <input
+            name="password"
+            type="password"
+            autocomplete="current-password"
+            required
+            autofocus
+          />
+        </label>
+        <button class="primary-button" type="submit">登录工作台</button>
+        <p class="staff-login-error" id="staff-login-error"></p>
+      </form>
+    </dialog>
+
+    <dialog class="handout-dialog" id="handout-dialog">
+      <form class="handout-editor" id="handout-form">
+        <div class="handout-editor-head">
+          <div>
+            <h2>编辑居家养护说明</h2>
+            <p id="handout-editor-state"></p>
+          </div>
+          <button class="dialog-close" id="close-handout-editor" type="button">×</button>
+        </div>
+        <label>
+          <span>标题</span>
+          <input name="title" maxlength="200" required />
+        </label>
+        <label>
+          <span>养护说明正文</span>
+          <textarea name="content" rows="16" maxlength="12000" required></textarea>
+        </label>
+        <div class="form-actions">
+          <button class="text-button" id="reset-handout" type="button">
+            恢复自动生成
+          </button>
+          <button class="outline-button" id="copy-handout" type="button">
+            复制文本
+          </button>
+          <button class="primary-button" type="submit">保存修改</button>
+        </div>
+      </form>
+    </dialog>
+
+    <dialog class="staff-management-dialog" id="staff-management-dialog">
+      <div class="staff-management-shell">
+        <header class="customer-dialog-head">
+          <div>
+            <p class="eyebrow">STAFF & PERMISSIONS</p>
+            <h2>员工账号管理</h2>
+            <p>管理员可创建员工、停用账号并查看员工操作记录。</p>
+          </div>
+          <button class="dialog-close" id="close-staff-management" type="button">×</button>
+        </header>
+        <div class="staff-management-body">
+          <section class="backup-section">
+            <div class="backup-section-head">
+              <div>
+                <p class="eyebrow">NEW STAFF</p>
+                <h3>新增员工</h3>
+              </div>
+            </div>
+            <form class="staff-account-form" id="staff-account-form">
+              <input name="username" required maxlength="60" placeholder="员工登录名" />
+              <input name="password" type="password" required minlength="8" placeholder="初始密码，至少 8 位" />
+              <select name="role">
+                <option value="therapist">普通理疗师</option>
+                <option value="admin">管理员</option>
+              </select>
+              <button class="primary-button" type="submit">创建账号</button>
+            </form>
+          </section>
+          <section class="backup-section">
+            <div class="backup-section-head">
+              <div>
+                <p class="eyebrow">STAFF LIST</p>
+                <h3>员工账号</h3>
+              </div>
+              <button class="text-button" id="refresh-staff-accounts" type="button">刷新</button>
+            </div>
+            <div class="staff-account-list" id="staff-account-list"></div>
+          </section>
+          <section class="backup-section">
+            <div class="backup-section-head">
+              <div>
+                <p class="eyebrow">OPERATION AUDIT</p>
+                <h3>最近员工操作</h3>
+              </div>
+              <button class="text-button" id="refresh-staff-audit" type="button">刷新</button>
+            </div>
+            <div class="staff-audit-list" id="staff-audit-list"></div>
+          </section>
+          <section class="backup-section">
+            <div class="backup-section-head">
+              <div>
+                <p class="eyebrow">LOGIN SECURITY</p>
+                <h3>失败登录记录</h3>
+              </div>
+              <button class="text-button" id="refresh-login-attempts" type="button">刷新</button>
+            </div>
+            <div class="staff-audit-list" id="login-attempt-list"></div>
+          </section>
+        </div>
+      </div>
+    </dialog>
+
+    <dialog class="portal-admin-dialog" id="portal-admin-dialog">
+      <div class="portal-admin-shell">
+        <header class="customer-dialog-head">
+          <div>
+            <p class="eyebrow">CUSTOMER PORTAL ACCOUNTS</p>
+            <h2>顾客网页账号</h2>
+            <p>核验顾客身份后，再生成找回码、撤销或恢复账号，并处理资料删除申请。</p>
+          </div>
+          <button class="dialog-close" id="close-portal-admin" type="button">×</button>
+        </header>
+        <div class="portal-admin-body">
+          <section class="backup-section">
+            <div class="backup-section-head">
+              <div>
+                <p class="eyebrow">ACCOUNT SEARCH</p>
+                <h3>查找顾客账号</h3>
+              </div>
+              <button class="text-button" id="refresh-portal-accounts" type="button">刷新</button>
+            </div>
+            <input
+              class="portal-admin-search"
+              id="portal-account-search"
+              type="search"
+              placeholder="输入顾客姓名或手机号"
+              autocomplete="off"
+            />
+            <div class="portal-admin-list" id="portal-account-list"></div>
+          </section>
+
+          <section class="backup-section">
+            <div class="backup-section-head">
+              <div>
+                <p class="eyebrow">DELETION REQUESTS</p>
+                <h3>待处理资料删除申请</h3>
+              </div>
+              <button class="text-button" id="refresh-deletion-requests" type="button">刷新</button>
+            </div>
+            <p class="portal-admin-warning">
+              同意后会清除网页账号、客户身份资料、接诊、预约、复诊和养护说明。操作前请先确认顾客身份，并提醒顾客旧备份文件不会自动清除。
+            </p>
+            <div class="portal-admin-list" id="portal-deletion-list"></div>
+          </section>
+
+          <div class="portal-recovery-result is-hidden" id="portal-recovery-result">
+            <span>一次性找回码</span>
+            <strong id="portal-recovery-code"></strong>
+            <small id="portal-recovery-expiry"></small>
+            <button class="outline-button" id="copy-portal-recovery-code" type="button">
+              复制找回码
+            </button>
+          </div>
+        </div>
+      </div>
+    </dialog>
+
+    <dialog class="pdf-intake-dialog" id="pdf-intake-dialog">
+      <div class="pdf-intake-shell">
+        <header class="customer-dialog-head">
+          <div>
+            <p class="eyebrow">PDF INTELLIGENT INTAKE</p>
+            <h2>PDF 智能录入</h2>
+            <p>上传文字型接诊表，AI 提取草稿；核对并确认后才会写入客户资料和接诊记录。</p>
+          </div>
+          <button class="dialog-close" id="close-pdf-intake" type="button">×</button>
+        </header>
+        <div class="pdf-intake-body">
+          <section class="pdf-intake-upload">
+            <label>
+              <span>选择 PDF</span>
+              <input id="pdf-intake-file" type="file" accept="application/pdf,.pdf" />
+            </label>
+            <label>
+              <span>录入到</span>
+              <select id="pdf-intake-target">
+                <option value="">新客户</option>
+              </select>
+            </label>
+            <button class="primary-button" id="parse-pdf-intake" type="button">
+              解析 PDF
+            </button>
+            <p class="pdf-intake-status" id="pdf-intake-status">
+              首版支持有文字层的 PDF，暂不支持扫描件和手写体。
+            </p>
+          </section>
+
+          <section class="is-hidden" id="pdf-intake-preview">
+            <div class="pdf-intake-meta" id="pdf-intake-meta"></div>
+            <div class="pdf-intake-warnings" id="pdf-intake-warnings"></div>
+            <div class="pdf-intake-review">
+              <div>
+                <div class="pdf-intake-section-head">
+                  <h3>PDF 原文</h3>
+                  <small>用于逐项核对，长文本会截断显示。</small>
+                </div>
+                <pre class="pdf-source-text" id="pdf-source-text"></pre>
+              </div>
+              <form class="pdf-intake-form" id="pdf-intake-form">
+                <fieldset id="pdf-customer-fieldset">
+                  <legend>客户资料</legend>
+                  <div class="form-grid">
+                    <label><span>姓名 *</span><input name="customer_name" /></label>
+                    <label><span>电话</span><input name="customer_phone" inputmode="tel" /></label>
+                    <label><span>年龄</span><input name="customer_age" /></label>
+                    <label><span>性别</span><input name="customer_gender" /></label>
+                    <label><span>现存问题</span><textarea name="customer_health_issues" rows="2"></textarea></label>
+                    <label><span>历史病例</span><textarea name="customer_historical_cases" rows="2"></textarea></label>
+                    <label><span>已选疗程</span><input name="customer_selected_course" /></label>
+                    <label><span>剩余次数</span><input name="customer_remaining_sessions" type="number" min="0" max="10000" value="0" /></label>
+                  </div>
+                </fieldset>
+
+                <fieldset>
+                  <legend>本次接诊</legend>
+                  <div class="form-grid">
+                    <label><span>就诊日期 *</span><input name="visit_date" type="date" required /></label>
+                    <label><span>接诊类型</span><input name="visit_type" value="初诊" /></label>
+                    <label class="span-2"><span>主诉 *</span><textarea name="chief_complaint" rows="2" required></textarea></label>
+                    <label><span>持续时长</span><input name="symptom_duration" /></label>
+                    <label><span>诱发因素</span><input name="trigger" /></label>
+                    <label class="span-2"><span>现病史</span><textarea name="current_history" rows="2"></textarea></label>
+                    <label class="span-2"><span>既往史</span><textarea name="medical_history" rows="2"></textarea></label>
+                    <label class="span-2"><span>查体记录</span><textarea name="objective_findings" rows="2"></textarea></label>
+                    <label class="span-2"><span>风险提示</span><textarea name="risk_assessment" rows="2"></textarea></label>
+                    <label class="span-2"><span>调理方案</span><textarea name="care_plan" rows="2"></textarea></label>
+                    <label><span>复诊日期</span><input name="followup_date" type="date" /></label>
+                    <label><span>复诊备注</span><input name="followup_note" /></label>
+                    <label class="span-2"><span>复诊记录</span><textarea name="followup_notes" rows="2"></textarea></label>
+                  </div>
+                </fieldset>
+                <label class="pdf-intake-remember">
+                  <input name="remember_edits" type="checkbox" checked />
+                  <span>保留 AI 原始草稿与本次人工修改，供当前阶段查看；暂不自动学习</span>
+                </label>
+                <p class="pdf-intake-confirm-note">
+                  确认后会新增客户资料和接诊记录，但不会扣减疗程次数。扣次仍须通过“接诊完成确认”。
+                </p>
+                <button class="primary-button" id="confirm-pdf-intake" type="submit">
+                  我核对完成，确认写入
+                </button>
+              </form>
+            </div>
+
+            <section class="pdf-knowledge-section">
+              <div class="pdf-intake-section-head">
+                <div>
+                  <h3>有来源的门店知识助手</h3>
+                  <small>仅使用当前门店知识库；没有命中的项目会明确拒绝回答。</small>
+                </div>
+              </div>
+              <div class="pdf-knowledge-list" id="pdf-knowledge-assistance"></div>
+            </section>
+          </section>
+
+          <section class="pdf-preference-section">
+            <div class="pdf-intake-section-head">
+              <div>
+                <h3>偏好记忆</h3>
+                <small>个人表达偏好由当前理疗师确认；门店规则必须管理员批准后才会应用。</small>
+              </div>
+              <button class="text-button" id="refresh-pdf-preferences" type="button">
+                刷新
+              </button>
+            </div>
+            <div class="pdf-preference-subsection">
+              <h4>待处理的重复修改</h4>
+              <div class="pdf-preference-list" id="pdf-preference-candidates">
+                正在检查修改样本…
+              </div>
+            </div>
+            <div class="pdf-preference-subsection">
+              <h4>门店规则审核</h4>
+              <div class="pdf-preference-list" id="pdf-pending-clinic-rules">
+                正在读取待审核规则…
+              </div>
+            </div>
+            <div class="pdf-preference-subsection">
+              <h4>已生效偏好</h4>
+              <div class="pdf-preference-list" id="pdf-active-preferences">
+                正在读取已生效偏好…
+              </div>
+            </div>
+          </section>
+
+          <section class="pdf-edit-history-section">
+            <div class="pdf-intake-section-head">
+              <div>
+                <h3>最近修改样本</h3>
+                <small>只记录每个字段的修改前后和建议分类，本阶段不会用于下次生成。</small>
+              </div>
+              <button class="text-button" id="refresh-pdf-edit-history" type="button">
+                刷新
+              </button>
+            </div>
+            <div class="pdf-edit-history-list" id="pdf-edit-history-list">
+              正在读取修改样本…
+            </div>
+          </section>
+        </div>
+      </div>
+    </dialog>
+
+    <div class="toast" id="toast" role="status"></div>
+    <script src="/static/app.js?v=17"></script>
+    <script src="/static/mobile.js?v=10"></script>
+  </body>
+</html>
+

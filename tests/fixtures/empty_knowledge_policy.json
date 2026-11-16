@@ -1,0 +1,12 @@
+{
+  "version": "test-empty",
+  "updated_at": "2026-11-15",
+  "default": {
+    "authority_level": "D",
+    "authority_rank": 30,
+    "source_type": "unclassified",
+    "label": "未分级来源",
+    "owner": "测试"
+  },
+  "sources": []
+}
