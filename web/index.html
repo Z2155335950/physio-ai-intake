@@ -32,7 +32,7 @@
     </script>
     <link rel="manifest" href="/manifest.webmanifest" />
     <link rel="icon" href="/static/icon.svg?v=8" type="image/svg+xml" />
-    <link rel="stylesheet" href="/static/fonts.css" />
+    <link rel="stylesheet" href="/static/fonts.css?v=10" />
     <link rel="stylesheet" href="/static/styles.css?v=12" />
   </head>
   <body>
@@ -129,7 +129,6 @@
         <section class="dashboard-panel" id="dashboard-view">
           <div class="dashboard-hero">
             <div>
-              <h2>今天先处理什么，一眼看清。</h2>
               <p id="dashboard-date">正在读取今日安排…</p>
             </div>
             <div class="dashboard-actions">
@@ -160,7 +159,6 @@
                 inputmode="numeric"
                 maxlength="4"
                 autocomplete="off"
-                placeholder="输入后四位，如 0021"
                 aria-label="手机号后四位查找客户"
               />
             </div>
@@ -241,7 +239,7 @@
             <div class="knowledge-hub-head">
               <div>
                 <h3>门店知识检索</h3>
-                <p>直接搜索解剖、风险、价格、预约规则和沟通模板，不连接大模型。</p>
+                <p>直接搜索解剖、风险、价格、预约规则和沟通模板。</p>
               </div>
             </div>
             <form class="knowledge-search-form" id="knowledge-search-form">
@@ -249,7 +247,7 @@
                 id="knowledge-search-input"
                 type="search"
                 maxlength="4000"
-                placeholder="输入关键词，例如：腰椎正骨禁忌、骨盆修复价格"
+                placeholder="关键词"
                 aria-label="知识检索关键词"
               />
               <button class="primary-button" id="knowledge-search-button" type="submit">

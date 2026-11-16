@@ -1,4 +1,44 @@
 @font-face {
+  font-family: "LXGW WenKai GB";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/static/fonts/lxgw-wenkai-gb-regular.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "LXGW WenKai GB";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("/static/fonts/lxgw-wenkai-gb-medium.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Glow Sans SC";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/static/fonts/glow-sans-sc-regular.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Glow Sans SC";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("/static/fonts/glow-sans-sc-medium.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Glow Sans SC";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("/static/fonts/glow-sans-sc-bold.woff2") format("woff2");
+}
+
+@font-face {
   font-family: "Noto Sans SC";
   font-style: normal;
   font-weight: 400;

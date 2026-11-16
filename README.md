@@ -16,7 +16,8 @@
     <a href="#quick-start">快速运行</a> ·
     <a href="#workflow">工作流程</a> ·
     <a href="#capabilities">核心能力</a> ·
-    <a href="#safety">安全边界</a>
+    <a href="#safety">安全边界</a> ·
+    <a href="./docs/BAYHACK_SUBMISSION.md">BayHack 提交包</a>
   </p>
 </div>
 

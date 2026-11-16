@@ -1,6 +1,8 @@
 :root {
-  --font-sans: "Noto Sans SC", "Microsoft YaHei UI", "PingFang SC", sans-serif;
-  --font-serif: "Noto Serif SC", "Songti SC", "SimSun", serif;
+  --font-sans: "Glow Sans SC", "Noto Sans SC", "Microsoft YaHei UI",
+    "PingFang SC", sans-serif;
+  --font-serif: "LXGW WenKai GB", "Noto Serif SC", "Songti SC", "SimSun",
+    serif;
   --ink: #17302c;
   --ink-soft: #526863;
   --paper: #f4f1ea;
@@ -476,7 +478,7 @@ button {
 
 .knowledge-hub-head h3 {
   margin: 0;
-  font-family: "Songti SC", serif;
+  font-family: var(--font-serif);
   font-size: 20px;
   font-weight: 600;
 }

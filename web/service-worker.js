@@ -1,9 +1,14 @@
-const CACHE_NAME = "physio-shell-v19";
+const CACHE_NAME = "physio-shell-v20";
 const SHELL_URLS = [
   "/",
   "/customer",
   "/static/mobile.html",
-  "/static/fonts.css",
+  "/static/fonts.css?v=10",
+  "/static/fonts/lxgw-wenkai-gb-regular.woff2",
+  "/static/fonts/lxgw-wenkai-gb-medium.woff2",
+  "/static/fonts/glow-sans-sc-regular.woff2",
+  "/static/fonts/glow-sans-sc-medium.woff2",
+  "/static/fonts/glow-sans-sc-bold.woff2",
   "/static/fonts/noto-sans-sc-regular.woff2",
   "/static/fonts/noto-sans-sc-bold.woff2",
   "/static/fonts/noto-serif-sc-regular.woff2",

@@ -1,6 +1,8 @@
 :root {
-  --font-sans: "Noto Sans SC", "Microsoft YaHei UI", "PingFang SC", sans-serif;
-  --font-serif: "Noto Serif SC", "Songti SC", "SimSun", serif;
+  --font-sans: "Glow Sans SC", "Noto Sans SC", "Microsoft YaHei UI",
+    "PingFang SC", sans-serif;
+  --font-serif: "LXGW WenKai GB", "Noto Serif SC", "Songti SC", "SimSun",
+    serif;
   --ink: #19332d;
   --muted: #6c7b75;
   --green: #0f6557;
